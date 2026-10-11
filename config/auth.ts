@@ -1,37 +1,35 @@
 import { defineConfig } from '@adonisjs/auth'
-import { sessionGuard, sessionUserProvider } from '@adonisjs/auth/session'
-import { tokensGuard, tokensUserProvider } from '@adonisjs/auth/access_tokens'
+import { sessionUserProvider } from '@adonisjs/auth/session'
+import { tokensUserProvider } from '@adonisjs/auth/access_tokens'
 import type { InferAuthenticators, InferAuthEvents, Authenticators } from '@adonisjs/auth/types'
+import { jwtGuard } from '@maximemrf/adonisjs-jwt'
 
 const authConfig = defineConfig({
   /**
    * Default guard used when no guard is explicitly specified.
    */
-  default: 'api',
+  default: 'jwt',
 
   guards: {
     /**
-     * Token-based guard for stateless API authentication.
+     * Stateless JWT authentication with refresh tokens.
      */
-    api: tokensGuard({
-      provider: tokensUserProvider({
-        tokens: 'accessTokens',
-        model: () => import('#models/user'),
-      }),
-    }),
-
-    /**
-     * Session-based guard for browser authentication.
-     */
-    web: sessionGuard({
-      /**
-       * Enable persistent login using remember-me tokens.
-       */
-      useRememberMeTokens: false,
-
+    jwt: jwtGuard({
       provider: sessionUserProvider({
         model: () => import('#models/user'),
       }),
+      /**
+       * Short-lived access tokens: they can't be revoked before they expire.
+       */
+      tokenExpiresIn: '15m',
+      /**
+       * One-time refresh tokens, stored in the jwt_refresh_tokens table.
+       */
+      refreshTokenUserProvider: tokensUserProvider({
+        tokens: 'refreshTokens',
+        model: () => import('#models/user'),
+      }),
+      refreshTokenExpiresIn: '7d',
     }),
   },
 })

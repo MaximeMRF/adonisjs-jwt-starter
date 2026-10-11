@@ -7,7 +7,7 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
-export class AuthAccessTokenSchema extends BaseModel {
+export class JwtRefreshTokenSchema extends BaseModel {
   static $columns = [
     'abilities',
     'createdAt',
@@ -20,11 +20,11 @@ export class AuthAccessTokenSchema extends BaseModel {
     'type',
     'updatedAt',
   ] as const
-  $columns = AuthAccessTokenSchema.$columns
+  $columns = JwtRefreshTokenSchema.$columns
   @column()
   declare abilities: string
   @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime | null
+  declare createdAt: DateTime
   @column.dateTime()
   declare expiresAt: DateTime | null
   @column()
@@ -40,7 +40,7 @@ export class AuthAccessTokenSchema extends BaseModel {
   @column()
   declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
+  declare updatedAt: DateTime
 }
 
 export class UserSchema extends BaseModel {

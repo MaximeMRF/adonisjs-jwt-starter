@@ -21,6 +21,12 @@ router
       .group(() => {
         router.post('signup', [controllers.NewAccount, 'store'])
         router.post('login', [controllers.AccessTokens, 'store'])
+        /**
+         * No auth middleware: the access token has usually expired
+         * when the client refreshes or logs out
+         */
+        router.post('refresh', [controllers.AccessTokens, 'refresh'])
+        router.post('logout', [controllers.AccessTokens, 'destroy'])
       })
       .prefix('auth')
       .as('auth')
@@ -28,7 +34,6 @@ router
     router
       .group(() => {
         router.get('profile', [controllers.Profile, 'show'])
-        router.post('logout', [controllers.AccessTokens, 'destroy'])
       })
       .prefix('account')
       .as('profile')
