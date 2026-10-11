@@ -2,6 +2,8 @@
 
 An AdonisJS v7 API with JWT authentication and refresh tokens, built with [@maximemrf/adonisjs-jwt](https://github.com/MaximeMRF/adonisjs-jwt).
 
+> It uses the 1.0 release candidate of the package (`1.0.0-rc.2`), it moves to 1.0.0 when it's out.
+
 It's the official [API starter kit](https://github.com/adonisjs/api-starter-kit) with its opaque access tokens replaced by:
 
 - short-lived JWT access tokens (15 minutes);
