@@ -44,7 +44,7 @@ test.group('Auth | signup', (group) => {
     assert.equal(body.type, 'bearer')
     assert.equal(body.expiresIn, '15m')
     assert.isString(body.token)
-    assert.match(body.refreshToken!, /^rt_/)
+    assert.match(body.refreshToken, /^rt_/)
   })
 
   test('reject an email already in use', async ({ client }) => {
@@ -70,7 +70,7 @@ test.group('Auth | login', (group) => {
 
     response.assertStatus(200)
     const { token, refreshToken } = response.body().data
-    assert.match(refreshToken!, /^rt_/)
+    assert.match(refreshToken, /^rt_/)
 
     const payload = decodePayload(token)
     assert.equal(payload.userId, user.id)
@@ -152,7 +152,7 @@ test.group('Auth | protected routes', (group) => {
 
     const response = await client
       .get('/api/v1/account/profile')
-      .bearerToken(login.body().data.refreshToken!)
+      .bearerToken(login.body().data.refreshToken)
 
     response.assertStatus(401)
   })
